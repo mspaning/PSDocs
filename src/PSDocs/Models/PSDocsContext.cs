@@ -17,6 +17,8 @@ namespace PSDocs.Models
 
         public string[] Culture { get; set; }
 
+        public OutputFormat OutputFormat { get; set; }
+
         public WriteDocumentDelegate WriteDocumentHook { get; set; }
 
         public static PSDocsContext Create(PSDocumentOption option, string[] name, string[] tag, string outputPath)

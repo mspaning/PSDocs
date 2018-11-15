@@ -65,7 +65,10 @@ function Invoke-PSDocument {
         [PSDocs.Configuration.MarkdownEncoding]$Encoding = [PSDocs.Configuration.MarkdownEncoding]::Default,
 
         [Parameter(Mandatory = $False)]
-        [String[]]$Culture
+        [String[]]$Culture,
+
+        [Parameter(Mandatory = $False)]
+        [PSDocs.Configuration.OutputFormat]$OutputFormat = [PSDocs.Configuration.OutputFormat]::Markdown
     )
     begin {
         Write-Verbose -Message "[Invoke-PSDocument]::BEGIN";
