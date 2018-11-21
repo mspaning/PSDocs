@@ -31,6 +31,9 @@ What's changed since v0.6.3:
 
 - Engine features:
   - Added support for MacOS and Linux. [#59](https://github.com/BernieWhite/PSDocs/issues/59)
+  - **Experimental**: Added support for OpenXml to generate Office Word (.docx) documents.
+    - Added `-OutputFormat` parameter to `Invoke-PSDocument`.
+    - This parameter allows generation of documents as OpenXml instead of Markdown.
 - Deprecations and removals:
   - Added [upgrade notes](docs/upgrade-notes.md) for migration from v0.6.x to v0.7.0.
   - **Breaking change**: Removed support for inline document blocks.

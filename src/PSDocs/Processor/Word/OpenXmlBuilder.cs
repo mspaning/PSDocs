@@ -1,21 +1,22 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Validation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenXml = DocumentFormat.OpenXml.Wordprocessing;
 
 namespace PSDocs.Processor.Word
 {
-    public sealed class DocxBuilder
+    /// <summary>
+    /// Defines a OpenXml document builder.
+    /// </summary>
+    internal sealed class OpenXmlBuilder
     {
         private WordprocessingDocument _Document;
         private readonly string _TemplateFile;
 
-        public DocxBuilder(string templateFile)
+        public OpenXmlBuilder(string templateFile)
         {
             _TemplateFile = templateFile;
-            //_Docx = new 
         }
 
         public OpenXml.Body Body
@@ -46,10 +47,6 @@ namespace PSDocs.Processor.Word
             _Document.MainDocumentPart.Document = new OpenXml.Document();
 
             var body = _Document.MainDocumentPart.Document.Body = new OpenXml.Body();
-                //.AppendChild(new OpenXml.Body());
-            //var para = body.AppendChild(new OpenXml.Paragraph());
-            //var run = para.AppendChild(new OpenXml.Run());
-            //run.AppendChild(new OpenXml.Text("Create text in body - CreateWordprocessingDocument"));
 
             _Document.Save();
 

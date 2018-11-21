@@ -1,12 +1,12 @@
-﻿using PSDocs.Configuration;
-using PSDocs.Models;
-using OpenXml = DocumentFormat.OpenXml.Wordprocessing;
+﻿using PSDocs.Models;
 
 namespace PSDocs.Processor.Word
 {
+    /// <summary>
+    /// A processor to handle document generation for OpenXml (.docx).
+    /// </summary>
     public sealed class WordProcessor
     {
-
         public string Process(PSDocsContext executionContext, Document document)
         {
             if (document == null)
@@ -42,9 +42,8 @@ namespace PSDocs.Processor.Word
                 return;
             }
 
-            var documentNode = node as DocumentNode;
-
-            if (documentNode != null)
+            // Handle the node
+            if (node is DocumentNode documentNode)
             {
                 switch (documentNode.Type)
                 {
@@ -78,12 +77,11 @@ namespace PSDocs.Processor.Word
 
                         break;
 
-                        // TODO: Handle includes
-                        //case DocumentNodeType.Include:
+                    case DocumentNodeType.Include:
 
-                        //    Include(context, documentNode as Include);
+                        Include(context, documentNode as Include);
 
-                        //    break;
+                        break;
                 }
 
                 return;
@@ -92,6 +90,9 @@ namespace PSDocs.Processor.Word
             //String(context, node.ToString());
         }
 
+        /// <summary>
+        /// Process sections.
+        /// </summary>
         private void Section(WordProcessorContext context, Section node)
         {
             context.Builder.Section(node.Title);
@@ -105,24 +106,45 @@ namespace PSDocs.Processor.Word
             }
         }
 
+        /// <summary>
+        /// Process block quotes.
+        /// </summary>
         private void BlockQuote(WordProcessorContext context, BlockQuote node)
         {
             context.Builder.BlockQuote(node.Content);
         }
 
+        /// <summary>
+        /// Process code blocks.
+        /// </summary>
         private void Code(WordProcessorContext context, Code node)
         {
             context.Builder.Code(node.Content);
         }
 
+        /// <summary>
+        /// Process text.
+        /// </summary>
         private void Text(WordProcessorContext context, Text node)
         {
             context.Builder.Text(node.Content);
         }
 
+        /// <summary>
+        /// Process tables.
+        /// </summary>
         private void Table(WordProcessorContext context, Table node)
         {
             context.Builder.Table(node.Rows);
+        }
+
+        /// <summary>
+        /// Process includes.
+        /// </summary>
+        private void Include(WordProcessorContext context, Include node)
+        {
+            var text = System.IO.File.ReadAllText(node.Path);
+            context.Builder.Text(text);
         }
     }
 }
