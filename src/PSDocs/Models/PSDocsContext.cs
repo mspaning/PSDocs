@@ -3,7 +3,7 @@ using System.IO;
 
 namespace PSDocs.Models
 {
-    public delegate object WriteDocumentDelegate(PSDocumentOption option, Document document);
+    public delegate object WriteDocumentDelegate(PSDocsContext context, Document document);
 
     public sealed class PSDocsContext
     {
@@ -11,7 +11,11 @@ namespace PSDocs.Models
 
         public DocumentFilter Filter { get; private set; }
 
+        public string ModulePath { get; set; }
+
         public string OutputPath { get; set; }
+
+        public bool PassThru { get; set; }
 
         public string[] InstanceName { get; set; }
 
@@ -40,7 +44,7 @@ namespace PSDocs.Models
 
         public object WriteDocument(Document document)
         {
-            return WriteDocumentHook?.Invoke(Option, document);
+            return WriteDocumentHook?.Invoke(context: this, document: document);
         }
     }
 }

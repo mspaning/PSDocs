@@ -14,7 +14,7 @@ namespace PSDocs
             var options = new PSDocumentOption();
 
 
-            processor.Process(option: options, document: GetDocument());
+            processor.Process(executionContext: options, document: GetDocument());
         }
 
         private static WordProcessor GetProcessor()
@@ -29,6 +29,19 @@ namespace PSDocs
 
             result.Node.Add(ModelHelper.NewSection("Section 1", 2));
             result.Node.Add(ModelHelper.Text("This is section 1."));
+
+            var table = new Table();
+            table.Headers.AddRange(new[]
+            {
+                new TableColumnHeader() { Label = "Name"},
+                new TableColumnHeader() { Label = "Value"}
+            });
+            table.Rows.AddRange(new[]
+            {
+                new string[] { "Name1", "Value1" },
+                new string[] { "Name2", "Value2" }
+            });
+            result.Node.Add(table);
 
             return result;
         }

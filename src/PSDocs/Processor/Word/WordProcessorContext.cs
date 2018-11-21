@@ -10,12 +10,12 @@ namespace PSDocs.Processor.Word
         public readonly Document Document;
         public readonly DocxBuilder Builder;
 
-        public WordProcessorContext(PSDocumentOption option, Document document)
+        public WordProcessorContext(PSDocumentOption option, Document document, string templateFile)
         {
             Option = option;
             Document = document;
 
-            Builder = new DocxBuilder();
+            Builder = new DocxBuilder(templateFile);
         }
     }
 }

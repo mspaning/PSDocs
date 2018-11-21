@@ -7,44 +7,28 @@ namespace PSDocs.Processor.Word
     public sealed class WordProcessor
     {
 
-        public string Process(PSDocumentOption option, Document document)
+        public string Process(PSDocsContext executionContext, Document document)
         {
             if (document == null)
             {
                 return string.Empty;
             }
 
-            var context = new WordProcessorContext(option, document);
-            context.Builder.CreateDocument("c:\\dev\\workspace\\PSDocs\\demo.docx");
+            var templatePath = System.IO.Path.Combine(executionContext.ModulePath, "Templates/Template.docx");
+
+            var context = new WordProcessorContext(executionContext.Option, document, templatePath);
+            context.Builder.Document(System.IO.Path.Combine(document.Path, string.Concat(document.DocumentName, ".docx")));
 
             Document(context);
 
             context.Builder.Build();
-
-            //context.Builder.Remove(context.Builder.Length - 2, 2);
-            //var result = context.Builder.ToString();
-
-            //if (string.IsNullOrEmpty(result))
-            //{
-            //    result = null;
-            //}
-
-            //return result;
 
             return null;
         }
 
         private void Document(WordProcessorContext context)
         {
-            // Process metadata
-            //Metadata(context);
-
-            //if (!string.IsNullOrEmpty(context.Document.Title))
-            //{
-            //    context.WriteLine("# ", context.Document.Title);
-            //    context.WriteLine(string.Empty);
-            //}
-
+            // TODO: Handle metadata
             foreach (var node in context.Document.Node)
             {
                 Node(context, node);
@@ -70,35 +54,36 @@ namespace PSDocs.Processor.Word
 
                         break;
 
-                    //case DocumentNodeType.Table:
+                    case DocumentNodeType.Table:
 
-                    //    Table(context, documentNode as Table);
+                        Table(context, documentNode as Table);
 
-                    //    break;
+                        break;
 
-                    //case DocumentNodeType.Code:
+                    case DocumentNodeType.Code:
 
-                    //    Code(context, documentNode as Code);
+                        Code(context, documentNode as Code);
 
-                    //    break;
+                        break;
 
-                    //case DocumentNodeType.BlockQuote:
+                    case DocumentNodeType.BlockQuote:
 
-                    //    BlockQuote(context, documentNode as BlockQuote);
+                        BlockQuote(context, documentNode as BlockQuote);
 
-                    //    break;
+                        break;
 
-                    //case DocumentNodeType.Text:
+                    case DocumentNodeType.Text:
 
-                    //    Text(context, documentNode as Text);
+                        Text(context, documentNode as Text);
 
-                    //    break;
+                        break;
 
-                    //case DocumentNodeType.Include:
+                        // TODO: Handle includes
+                        //case DocumentNodeType.Include:
 
-                    //    Include(context, documentNode as Include);
+                        //    Include(context, documentNode as Include);
 
-                    //    break;
+                        //    break;
                 }
 
                 return;
@@ -107,20 +92,37 @@ namespace PSDocs.Processor.Word
             //String(context, node.ToString());
         }
 
-        private void Section(WordProcessorContext context, Section section)
+        private void Section(WordProcessorContext context, Section node)
         {
-            var body = context.Builder.Body;
-            var paragraph = body.AppendChild(new OpenXml.Paragraph());
-            var run = paragraph.AppendChild(new OpenXml.Run());
-            run.AppendChild(new OpenXml.Text(section.Title));
+            context.Builder.Section(node.Title);
 
-            if (section.Node.Count > 0)
+            if (node.Node.Count > 0)
             {
-                foreach (var node in section.Node)
+                foreach (var child in node.Node)
                 {
-                    Node(context, node);
+                    Node(context, child);
                 }
             }
+        }
+
+        private void BlockQuote(WordProcessorContext context, BlockQuote node)
+        {
+            context.Builder.BlockQuote(node.Content);
+        }
+
+        private void Code(WordProcessorContext context, Code node)
+        {
+            context.Builder.Code(node.Content);
+        }
+
+        private void Text(WordProcessorContext context, Text node)
+        {
+            context.Builder.Text(node.Content);
+        }
+
+        private void Table(WordProcessorContext context, Table node)
+        {
+            context.Builder.Table(node.Rows);
         }
     }
 }
