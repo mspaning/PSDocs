@@ -5,9 +5,12 @@ namespace PSDocs.Configuration
 {
     public sealed class OutputOption
     {
+        private const OutputFormat DEFAULT_FORMAT = OutputFormat.Default;
+
         internal static readonly OutputOption Default = new OutputOption
         {
             Culture = null,
+            Format = DEFAULT_FORMAT,
             Path = null,
         };
 
@@ -15,11 +18,13 @@ namespace PSDocs.Configuration
         {
             Culture = null;
             Path = null;
+            Format = null;
         }
 
         internal OutputOption(OutputOption option)
         {
             Culture = option.Culture;
+            Format = option.Format;
             Path = option.Path;
         }
 
@@ -57,6 +62,9 @@ namespace PSDocs.Configuration
 
         [DefaultValue(null)]
         public string[] Culture { get; set; }
+
+        [DefaultValue(null)]
+        public OutputFormat? Format { get; set; }
 
         /// <summary>
         /// The file path location to save results.

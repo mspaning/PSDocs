@@ -17,7 +17,7 @@ namespace PSDocs.Processor.Word
             var templatePath = System.IO.Path.Combine(executionContext.ModulePath, "Templates/Template.docx");
 
             var context = new WordProcessorContext(executionContext.Option, document, templatePath);
-            context.Builder.Document(System.IO.Path.Combine(document.Path, string.Concat(document.DocumentName, ".docx")));
+            context.Builder.Document(System.IO.Path.Combine(document.Path, string.Concat(document.Name, ".docx")));
 
             Document(context);
 

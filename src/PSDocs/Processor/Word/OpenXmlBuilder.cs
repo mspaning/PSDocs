@@ -113,8 +113,6 @@ namespace PSDocs.Processor.Word
             };
         }
 
-        // Take the data from a two-dimensional array and build a table at the 
-        // end of the supplied document.
         public void Table(List<string[]> data)
         {
             var document = _Document.MainDocumentPart.Document;
@@ -154,7 +152,7 @@ namespace PSDocs.Processor.Word
                     Size = 12
                 }));
 
-            table.AppendChild<OpenXml.TableProperties>(properties);
+            table.AppendChild(properties);
 
             for (var i = 0; i < data.Count; i++)
             {
@@ -197,7 +195,7 @@ namespace PSDocs.Processor.Word
             }
         }
 
-        public string GetStyleId(string styleName)
+        private string GetStyleId(string styleName)
         {
             var styles = _Document.MainDocumentPart.StyleDefinitionsPart.Styles;
 
@@ -213,7 +211,6 @@ namespace PSDocs.Processor.Word
         public void Build()
         {
             _Document.Dispose();
-            //_Document.Save();
         }
 
         public void Validate()
